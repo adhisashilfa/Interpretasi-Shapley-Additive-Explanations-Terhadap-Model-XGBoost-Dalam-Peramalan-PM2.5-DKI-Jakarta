@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Prediksi</title>
+    <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fff;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+
+        .navbar {
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+            opacity: 1;
+        }
+
+        .nav-link.active,
+        .nav-link:hover {
+            color: #007bff !important;
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #007bff, #00c6ff);
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(90deg, #0056b3, #003f8a);
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            border-radius: 8px;
+            margin-top: auto;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin-top: 0px;
+        }
+        .card1 {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: white;
+            margin-bottom: 20px;
+            margin-top: 100px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: white;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            color: #007bff;
+        }
+        h3, h4 {
+            text-align: center;
+            font-weight: bold;
+            color: #00060b;
+        }
+        .table-responsive {
+            max-height: 600px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+        .img-fluid, .shap-img, .pred-plot-img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            height: auto;
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .d-flex {
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="welcome.html">AirPredict</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'welcome' %}active{% endif %}" href="{{ url_for('welcome') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'upload_file' %}active{% endif %}" href="{{ url_for('upload_file') }}">Upload File</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'show_data' %}active{% endif %}" href="{{ url_for('show_data') }}">Show Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'preprocess' %}active{% endif %}" href="{{ url_for('preprocess') }}">Preprocessing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'eda' %}active{% endif %}" href="{{ url_for('eda') }}">EDA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'select_features' %}active{% endif %}" href="{{ url_for('select_features') }}">Select Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'train_config' %}active{% endif %}" href="{{ url_for('train_config') }}">Konfigurasi Parameter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}" href="{{ url_for('predict') }}">Predict</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Margin atas card1 diperbaiki -->
+    <div class="card1" style="margin-top: 120px;">
+        <h2>📊 Hasil Prediksi dengan XGBoost</h2>
+
+        <!-- Akurasi Model -->
+        <div class="card">
+            <h3>📉 Akurasi Model</h3>
+            <p class="text-muted text-center">
+                Root Mean Squared Error (RMSE) menunjukkan seberapa besar rata-rata kesalahan prediksi dalam satuan yang sama dengan data aslinya.
+                Nilai RMSE yang lebih kecil menunjukkan bahwa model memiliki performa prediksi yang lebih baik dan lebih akurat terhadap data sebenarnya.
+            </p>
+            <h4 class="text-center">RMSE: <strong>{{ rmse_value }}</strong></h4>
+        </div>
+
+        <!-- Tabel Prediksi -->
+        <div class="card">
+            <h3>📊 Tabel Perbandingan Aktual vs Prediksi</h3>
+            <p class="text-muted text-center">
+                Tabel berikut memperlihatkan nilai aktual dan prediksi dari model untuk sampel data uji (test set).
+            </p>
+            {% if predictions %}
+            <div class="table-responsive">
+                {{ predictions | safe }}
+            </div>
+            {% else %}
+            <p class="text-danger text-center">⚠️ Data prediksi tidak tersedia.</p>
+            {% endif %}
+        </div>
+
+        <!-- Grafik Prediksi -->
+        <div class="card">
+            <h3>📈 Visualisasi Aktual vs Prediksi</h3>
+            <p class="text-muted text-center">
+                Grafik berikut menunjukkan perbandingan antara nilai aktual dan nilai yang diprediksi oleh model.
+            </p>
+            {% if pred_plot_encoded %}
+                <img src="data:image/png;base64,{{ pred_plot_encoded }}" alt="Grafik Aktual vs Prediksi" class="img-fluid pred-plot-img">
+            {% else %}
+                <p class="text-danger text-center">⚠️ Grafik perbandingan tidak tersedia.</p>
+            {% endif %}
+        </div>
+
+        <!-- Prediksi ke Depan -->
+        <hr>
+        <div class="card mt-4 shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title text-success mb-4">📈 Peramalan PM2.5 untuk 3 Hari Mendatang</h4>
+                
+                <div class="text-center mb-4">
+                    <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid rounded" alt="Grafik Prediksi PM2.5">
+                </div>
+                
+                <div class="table-responsive">
+                    {{ tables|safe }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- SHAP Summary -->
+        <div class="card">
+            <h3>📊 SHAP Feature Importance</h3>
+            <p class="text-muted text-center">
+                Fitur dengan nilai SHAP rata-rata tinggi memiliki pengaruh lebih besar terhadap prediksi.
+            </p>
+            {% if shap_bar_encoded %}
+                <img src="data:image/png;base64,{{ shap_bar_encoded }}" alt="SHAP Bar Plot" class="img-fluid shap-img">
+            {% else %}
+                <p class="text-danger text-center">⚠️ Grafik SHAP bar tidak tersedia.</p>
+            {% endif %}
+        </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('select_features') }}" class="btn btn-secondary">⬅ Pilih Fitur Lagi</a>
+                <a href="{{ url_for('upload_file') }}" class="btn btn-primary">⬆️ Unggah Data Baru ➡</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

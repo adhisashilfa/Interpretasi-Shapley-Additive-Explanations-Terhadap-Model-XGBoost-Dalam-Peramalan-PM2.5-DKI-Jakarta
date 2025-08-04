@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploratory Data Analysis (EDA)</title>
+    <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fff;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+
+        .navbar {
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+            opacity: 1;
+        }
+
+        .nav-link.active,
+        .nav-link:hover {
+            color: #007bff !important;
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #007bff, #00c6ff);
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(90deg, #0056b3, #003f8a);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin-top: 0px;
+        }
+
+        .card1 {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: white;
+            margin-bottom: 20px;
+            margin-top: 100px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: white;
+            margin-bottom: 30px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .img-fluid {
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            height: auto;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .d-flex {
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="welcome.html">AirPredict</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'welcome' %}active{% endif %}" href="{{ url_for('welcome') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'upload_file' %}active{% endif %}" href="{{ url_for('upload_file') }}">Upload File</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'show_data' %}active{% endif %}" href="{{ url_for('show_data') }}">Show Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'preprocess' %}active{% endif %}" href="{{ url_for('preprocess') }}">Preprocessing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'eda' %}active{% endif %}" href="{{ url_for('eda') }}">EDA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'select_features' %}active{% endif %}" href="{{ url_for('select_features') }}">Select Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'train_config' %}active{% endif %}" href="{{ url_for('train_config') }}">Konfigurasi Parameter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}" href="{{ url_for('predict') }}">Predict</a>
+                    </li>                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <div class="container">
+        <div class="card1">
+            <h2>🔍 Exploratory Data Analysis (EDA)</h2>
+
+            <div class="card">
+                <h3>📊 Statistik Dasar</h3>
+                <div class="table-responsive">{{ stats_html | safe }}</div>
+            </div>
+
+            <div class="card">
+                <h3>❗ Missing Values</h3>
+                <div class="table-responsive">{{ missing_html | safe }}</div>
+            </div>
+
+            <div class="card">
+                <h3>📉 Tren Harian PM10 per Stasiun</h3>
+                <img src="data:image/png;base64,{{ series_pm10_encoded }}" class="img-fluid">
+            </div>
+
+            <div class="card">
+                <h3>📉 Tren Harian PM2.5 per Stasiun</h3>
+                <img src="data:image/png;base64,{{ series_pm25_encoded }}" class="img-fluid">
+            </div>
+
+            <div class="card">
+                <h3>📉 Tren Harian CO (Carbon Monoxide) per Stasiun</h3>
+                <img src="data:image/png;base64,{{ series_co_encoded }}" class="img-fluid">
+            </div>
+
+            <div class="card">
+                <h3>📉 Tren Harian O₃ (Ozon) per Stasiun</h3>
+                <img src="data:image/png;base64,{{ series_o3_encoded }}" class="img-fluid">
+            </div>
+
+            <div class="card">
+                <h3>📉 Tren Harian SO₂ (Sulfur Dioksida) per Stasiun</h3>
+                <img src="data:image/png;base64,{{ series_so2_encoded }}" class="img-fluid">
+            </div>
+
+            <div class="card">
+                <h3>📉 Tren Harian NO₂ (Nitrogen Dioksida) per Stasiun</h3>
+                <img src="data:image/png;base64,{{ series_no2_encoded }}" class="img-fluid">
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('preprocess') }}" class="btn btn-secondary">⬅ Kembali ke Preprocessing</a>
+                <a href="{{ url_for('select_features') }}" class="btn btn-primary">Lanjut ke Pemilihan Fitur ➡</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

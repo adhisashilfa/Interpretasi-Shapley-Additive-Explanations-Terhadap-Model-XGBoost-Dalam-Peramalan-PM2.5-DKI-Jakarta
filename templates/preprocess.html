@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preprocessing Data</title>
+    <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fff;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+
+        .navbar {
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+            opacity: 1;
+        }
+
+        .nav-link.active,
+        .nav-link:hover {
+            color: #007bff !important;
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #007bff, #00c6ff);
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(90deg, #0056b3, #003f8a);
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            border-radius: 8px;
+            margin-top: auto;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin-top: 0px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: white;
+            margin-top: 100px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="welcome.html">AirPredict</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'welcome' %}active{% endif %}" href="{{ url_for('welcome') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'upload_file' %}active{% endif %}" href="{{ url_for('upload_file') }}">Upload File</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'show_data' %}active{% endif %}" href="{{ url_for('show_data') }}">Show Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'preprocess' %}active{% endif %}" href="{{ url_for('preprocess') }}">Preprocessing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'eda' %}active{% endif %}" href="{{ url_for('eda') }}">EDA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'select_features' %}active{% endif %}" href="{{ url_for('select_features') }}">Select Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'train_config' %}active{% endif %}" href="{{ url_for('train_config') }}">Konfigurasi Parameter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}" href="{{ url_for('predict') }}">Predict</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <div class="container">
+        <div class="card">
+            <h2>Hasil Preprocessing</h2>
+            <div class="table-responsive">
+                {{ table_html | safe }}
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('upload_file') }}" class="btn btn-secondary">⬅ Kembali ke Upload Data</a>
+                <a href="{{ url_for('eda') }}" class="btn btn-primary">Lihat Hasil EDA ➡</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
