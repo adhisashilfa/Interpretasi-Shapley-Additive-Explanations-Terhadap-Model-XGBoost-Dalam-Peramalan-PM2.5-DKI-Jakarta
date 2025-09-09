@@ -1,7 +1,8 @@
-🌫️ Prediksi Kualitas Udara Menggunakan XGBoost
+🌫️ Prediksi Kualitas Udara Menggunakan XGBoost  
 Proyek ini membangun model machine learning untuk memprediksi kualitas udara (PM2.5) menggunakan algoritma XGBoost. Model ini di-deploy melalui aplikasi Flask untuk memberikan prediksi dan insight berbasis data.
 
-🚀 Latar Belakang
+
+🚀 Latar Belakang  
 Kualitas udara berperan penting dalam kesehatan masyarakat dan lingkungan. Pemantauan manual sering kali terlambat dalam memberikan informasi. Oleh karena itu, diperlukan sistem prediksi berbasis machine learning agar masyarakat dan pembuat kebijakan dapat mengambil keputusan lebih cepat.
 
 🎯 Tujuan
